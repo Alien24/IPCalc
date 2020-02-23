@@ -1,0 +1,281 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package kalkulatoripfx;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import java.util.*; 
+
+/**
+ *
+ * @author Rafał
+ */
+public class FXMLDocumentController implements Initializable {
+    String dex1, dex2, dex3, dex4;
+    int Dec1, Dec2, Dec3, Dec4;
+    int liczba, zmienna = 0;
+    int zmienna2 = 0, cyfra;
+    long Adresy = 2;
+    String lolek, lolekTwo;
+    int licznik = 0;
+
+   @FXML
+   private Label IPDex, IPBin;
+   @FXML
+   private Label MacDex, MacBin;
+   @FXML
+   private Label IPSieci, BinSieci;
+   @FXML
+   private Label adresRozgDec, adresRozgBin;
+   @FXML
+   private Label HostDex;
+   @FXML
+   private TextField IP1, IP2, IP3, IP4;
+   @FXML
+   private TextField Mac1, Mac2, Mac3, Mac4;
+   
+
+   
+    public void AdresIP(){
+        
+        dex1 = IP1.getText();
+        IPDex.setText(IP1.getText());
+        Dec1=Integer.parseInt(dex1);
+        
+        dex2 = IP2.getText();
+        IPDex.setText(IP2.getText());
+        Dec2=Integer.parseInt(dex2);
+        
+        dex3 = IP3.getText();
+        IPDex.setText(IP3.getText());
+        Dec3=Integer.parseInt(dex3);
+        
+        dex4 = IP4.getText();
+        IPDex.setText(IP4.getText());
+        Dec4=Integer.parseInt(dex4);
+        
+        if (Dec1<256 & Dec2<256 & Dec3<256 & Dec4<256 ){
+             IPDex.setText(Dec1 + "." + Dec2 + "." + Dec3 + "." + Dec4);
+             Obliczenia();
+             IPBin.setText(dex1 + "." + dex2 + "." + dex3 + "." + dex4);
+        }
+        else{
+            IPDex.setText("błędny adres");
+            IPBin.setText("błędny adres");
+
+        }      
+        lolekTwo = dex1+dex2+dex3+dex4;
+    }
+    public void MacIP(){
+        
+        dex1 = Mac1.getText();
+        MacDex.setText(Mac1.getText());
+        Dec1=Integer.parseInt(dex1);
+        liczba = Dec1;
+        SprawdzenieMaski();
+        
+        dex2 = Mac2.getText();
+        MacDex.setText(Mac2.getText());
+        Dec2=Integer.parseInt(dex2);
+        liczba = Dec2;
+        SprawdzenieMaski();
+
+        dex3 = Mac3.getText();
+        MacDex.setText(Mac3.getText());
+        Dec3=Integer.parseInt(dex3);
+        liczba = Dec3;
+        SprawdzenieMaski();
+        
+        dex4 = Mac4.getText();
+        MacDex.setText(Mac4.getText());
+        Dec4=Integer.parseInt(dex4);
+        liczba = Dec4;
+        SprawdzenieMaski();
+        
+        WypisanieMac();
+
+        
+       
+
+      
+    }
+    
+    
+    public void Obliczenia(){
+
+        if (Dec1<256 & Dec2<256 & Dec3<256 & Dec4 <256 ){
+            dex1 = Integer.toBinaryString(Dec1);
+            while(dex1.length() !=8 ){
+                dex1 = "0" + dex1;
+            }
+            dex2 = Integer.toBinaryString(Dec2);
+            while(dex2.length() !=8 ){
+                dex2 = "0" + dex2;
+            }
+            dex3 = Integer.toBinaryString(Dec3);
+            while(dex3.length() !=8 ){
+                dex3 = "0" + dex3;
+            }
+            dex4 = Integer.toBinaryString(Dec4);
+            while(dex4.length() !=8 ){
+                dex4 = "0" + dex4;
+            }
+        }
+
+    }
+    public void SprawdzenieMaski(){
+        cyfra = 1;
+        for(int i = 0; i<8; i++){
+            if(liczba + cyfra == 256){
+                zmienna = zmienna + 1;
+                break;
+            }
+            if (liczba == 0){
+                zmienna = zmienna +1;
+                break;
+            }
+            else{
+                cyfra = cyfra *2;
+            }
+        } 
+       
+    }
+    
+    public void WypisanieMac(){
+        
+        if (zmienna > 3){
+            MacDex.setText(Dec1 + "." + Dec2 + "." + Dec3 + "." + Dec4);
+            Obliczenia();
+            MacBin.setText(dex1 + "." + dex2 + "." + dex3 + "." + dex4);
+            zmienna = 0;
+        }
+        else {
+            MacDex.setText("błędny adres");
+            MacBin.setText("błędny adres");
+        }
+    }
+    
+    public void WypiszHostow(){
+        SprawdzenieHostow();
+        
+        for(int i = 1; i < licznik; i++){
+            Adresy = Adresy * 2;
+        }
+        HostDex.setText(Adresy - 2 + " ");
+        licznik = 0;
+        Adresy = 2;
+        
+    }
+    
+    public void SprawdzenieHostow(){
+        lolek = dex1 + dex2 + dex3 +dex4;
+        char[] tablicaZnakow = lolek.toCharArray();
+        
+        char znak;
+        for(int i = 0; i < tablicaZnakow.length; i++)
+        {
+            znak = tablicaZnakow[i];
+            if(znak == 48 ) {
+                
+                licznik = licznik+1;
+            }
+        }
+       
+    }
+    
+    public void AdresSieci(){
+        int zmienna = 32;
+        char[] tablicaZnakow = lolek.toCharArray();
+        char znak;
+        for(int i = 0; i < tablicaZnakow.length; i++)
+        {
+            znak = tablicaZnakow[i];
+            if(znak == 48 ) {
+                
+                licznik = licznik+1;
+            }
+        }
+        zmienna = zmienna-licznik; 
+        char[] tablicaZnakowTwo = lolekTwo.toCharArray();
+        
+        for(int i = zmienna; i < tablicaZnakowTwo.length; i++)
+        {
+            tablicaZnakowTwo[i] = 48;
+        }
+        
+        lolekTwo = new String(tablicaZnakowTwo);
+        licznik =0;
+        
+        String actualValueOne = lolekTwo.substring(0,8);
+        String actualValueTwo = lolekTwo.substring(8,16);
+        String actualValueThree = lolekTwo.substring(16,24);
+        String actualValueFour = lolekTwo.substring(24,32);
+        Dec1 = Integer.parseInt(actualValueOne,2);
+        Dec2 = Integer.parseInt(actualValueTwo,2);
+        Dec3 = Integer.parseInt(actualValueThree,2);
+        Dec4 = Integer.parseInt(actualValueFour,2);
+        BinSieci.setText(actualValueOne + "." +actualValueTwo + "."+actualValueThree + "."+actualValueFour);
+        IPSieci.setText(Dec1+"."+Dec2+"."+Dec3+"."+Dec4);
+               
+    }
+    
+    public void AdresRozgloszeniowy(){
+        int zmienna = 32;
+        char[] tablicaZnakow = lolek.toCharArray();
+        char znak;
+        for(int i = 0; i < tablicaZnakow.length; i++)
+        {
+            znak = tablicaZnakow[i];
+            if(znak == 48 ) {
+                
+                licznik = licznik+1;
+            }
+        }
+        zmienna = zmienna-licznik; 
+        char[] tablicaZnakowTwo = lolekTwo.toCharArray();
+        
+        for(int i = zmienna; i < tablicaZnakowTwo.length; i++)
+        {
+            tablicaZnakowTwo[i] = 49;
+        }
+        
+        lolekTwo = new String(tablicaZnakowTwo);
+        licznik =0;
+        String actualValueOne = lolekTwo.substring(0,8);
+        String actualValueTwo = lolekTwo.substring(8,16);
+        String actualValueThree = lolekTwo.substring(16,24);
+        String actualValueFour = lolekTwo.substring(24,32);
+        Dec1 = Integer.parseInt(actualValueOne,2);
+        Dec2 = Integer.parseInt(actualValueTwo,2);
+        Dec3 = Integer.parseInt(actualValueThree,2);
+        Dec4 = Integer.parseInt(actualValueFour,2); 
+        adresRozgBin.setText(actualValueOne + "." +actualValueTwo + "."+actualValueThree + "."+actualValueFour);
+        adresRozgDec.setText(Dec1+"."+Dec2+"."+Dec3+"."+Dec4);
+    }
+
+    @FXML
+    public void Oblicz(ActionEvent event) {
+        AdresIP();
+        MacIP();
+        WypiszHostow();
+        AdresSieci();
+        AdresRozgloszeniowy();
+        
+            
+        
+    }
+ 
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    }    
+    
+}
